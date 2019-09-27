@@ -9,6 +9,7 @@ import Routes from "./Routes";
 class App extends Component {
   render() {
     return (
+
         <div className="App container">
           <Navbar fluid collapseOnSelect>
             <Navbar.Header>
@@ -27,6 +28,9 @@ class App extends Component {
               </Navbar.Brand>
               <Navbar.Brand>
                 <Link to="/done">Done</Link>
+              </Navbar.Brand>
+              <Navbar.Brand>
+                <Link to="/create">Create</Link>
               </Navbar.Brand>
               </Nav>
             </Navbar.Collapse>
