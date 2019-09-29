@@ -2,9 +2,10 @@
 
 .Todo .notes h4 {
   font-family: "Open Sans", sans-serif;
-  font-weight: 600;
+  font-weight: 900;
   overflow: hidden;
   line-height: 1.5;
+  font-size: 25px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }

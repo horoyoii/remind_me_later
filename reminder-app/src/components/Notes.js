@@ -1,47 +1,40 @@
 import React, { Component } from "react";
-import { FormGroup, FormControl, ControlLabel, HelpBlock, Button } from "react-bootstrap";
-//import config from "../config";
-import "./NewNote.css";
+import { FormGroup, FormControl, ControlLabel, HelpBlock, Button, ButtonToolbar } from "react-bootstrap";
 import axios from 'axios';
+import "./NewNote.css";
 
-
-export default class NewNote extends Component {
+export default class Notes extends Component {
   constructor(props) {
     super(props);
 
-    this.file = null;
-
     this.state = {
       isLoading: null,
+      noteid:"",
       title: "",
-      content: ""
+      content: "",
+      do_type:""
     };
   }
 
-  // validateForm() {
-  //   return this.state.content.length > 0;
-  // }
+  componentDidMount () {
+    const { noteid } = this.props.match.params;
+    const { title } = this.props.location.state;
+    const { content } = this.props.location.state;
+    const { do_type } = this.props.location.state;
+    this.setState({
+      noteid: noteid,
+      title: title,
+      content: content,
+      do_type:do_type
+    })
 
-  // handleChange = event => {
-  //   this.setState({
-  //     [event.target.id]: event.target.value
-  //   });
-  // }
-  //
-  // handleFileChange = event => {
-  //   this.file = event.target.files[0];
-  // }
-  //
-  // handleSubmit = async event => {
-  //   event.preventDefault();
-  //
-  //   if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
-  //     alert(`Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE/1000000} MB.`);
-  //     return;
-  //   }
-  //
-  //   this.setState({ isLoading: true });
-  // }
+
+    console.log(this.props.match.params.noteid);
+    console.log(title);
+    console.log(content);
+    console.log(do_type);
+  }
+
   handleChange = e => {
     console.log("handlechanged is called");
     console.log(e.target.name);
@@ -61,9 +54,10 @@ export default class NewNote extends Component {
     console.log(this.state.title);
     console.log(this.state.content);
 
-    // POST request to Server
-    axios.post(
-      'https://bovcq5al50.execute-api.ap-northeast-2.amazonaws.com/default/notes',{
+
+    axios.put(
+      'https://bovcq5al50.execute-api.ap-northeast-2.amazonaws.com/default/notes/'+this.state.noteid,
+      {
         "title": this.state.title,
         "content":this.state.content,
         "type":"Todo"
@@ -72,13 +66,12 @@ export default class NewNote extends Component {
       this.props.history.push('/');
     })
     .catch(res => {console.log(res)});
-    // Redirect to ....
 
   }
 
   render() {
     return (
-      <div className="NewNote">
+      <div className="Notes">
         <form onSubmit={this.handleSubmit}>
         <FormGroup
           controlId="title"
@@ -86,11 +79,11 @@ export default class NewNote extends Component {
           <ControlLabel>Title</ControlLabel>
           <FormControl
             type="text"
-            value={this.state.value}
-            placeholder="Enter text"
+            value={this.state.title}
             onChange={this.handleChange}
             name="title"
           />
+
           <FormControl.Feedback />
           <HelpBlock>Validation is based on string length.</HelpBlock>
         </FormGroup>
@@ -104,7 +97,17 @@ export default class NewNote extends Component {
               name="content"
             />
         </FormGroup>
-        <Button bsStyle="primary" type="submit">등록</Button>
+
+        <ButtonToolbar>
+          <Button bsStyle="primary" bsSize="large">
+            Primary button
+          </Button>
+          <Button bsSize="large">
+            Button
+          </Button>
+       </ButtonToolbar>;
+
+        <Button bsStyle="primary" type="submit" block>Save</Button>
         </form>
       </div>
     );

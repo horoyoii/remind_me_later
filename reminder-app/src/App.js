@@ -29,9 +29,6 @@ class App extends Component {
               <Navbar.Brand>
                 <Link to="/done">Done</Link>
               </Navbar.Brand>
-              <Navbar.Brand>
-                <Link to="/create">Create</Link>
-              </Navbar.Brand>
               </Nav>
             </Navbar.Collapse>
           </Navbar>

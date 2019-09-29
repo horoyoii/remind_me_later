@@ -24,7 +24,7 @@ export default class Todo extends Component {
       let result = res.data.result.Items;
       result.map(item => {
         const { data } = this.state;
-        console.log("insert"+item.title);
+        console.log(data);
         this.setState({
           data: data.concat(item)
         })
@@ -42,7 +42,10 @@ export default class Todo extends Component {
           <p>A simple note taking app</p>
         </div>
 
-        <Button bsStyle="primary">Primary</Button>
+        <Link to="/create">
+          <Button bsStyle="info" bsSize="large" block> + Create a new note</Button>
+        </Link>
+
         {this.state.data.map(item => {
           return(
             <ListGroup>
