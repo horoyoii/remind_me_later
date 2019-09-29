@@ -41,7 +41,6 @@ export default class Done extends Component {
           <h1>Done</h1>
           <p>A simple note taking app</p>
         </div>
-        <Button bsStyle="primary">Primary</Button>
 
         {this.state.data.map(item => {
           return(

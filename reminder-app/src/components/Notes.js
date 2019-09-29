@@ -14,6 +14,8 @@ export default class Notes extends Component {
       content: "",
       do_type:""
     };
+
+    this.DeleteNote = this.DeleteNote.bind(this);
   }
 
   componentDidMount () {
@@ -42,10 +44,10 @@ export default class Notes extends Component {
       [e.target.name]: e.target.value
     })
 
+
   };
 
   validateForm(){};
-  handleFileChange = event => {};
 
   handleSubmit = async event =>{
     event.preventDefault();
@@ -53,6 +55,7 @@ export default class Notes extends Component {
     console.log("handleSubmit called");
     console.log(this.state.title);
     console.log(this.state.content);
+    console.log(this.state.do_type);
 
 
     axios.put(
@@ -60,13 +63,22 @@ export default class Notes extends Component {
       {
         "title": this.state.title,
         "content":this.state.content,
-        "type":"Todo"
+        "type":this.state.do_type
       }
     ).then(res =>{
       this.props.history.push('/');
     })
     .catch(res => {console.log(res)});
 
+  }
+
+  DeleteNote(){
+    axios.delete(
+      'https://bovcq5al50.execute-api.ap-northeast-2.amazonaws.com/default/notes/'+this.state.noteid
+    ).then(res =>{
+      this.props.history.push('/');
+    })
+    .catch(res => {console.log(res)});
   }
 
   render() {
@@ -98,17 +110,26 @@ export default class Notes extends Component {
             />
         </FormGroup>
 
-        <ButtonToolbar>
-          <Button bsStyle="primary" bsSize="large">
-            Primary button
-          </Button>
-          <Button bsSize="large">
-            Button
-          </Button>
-       </ButtonToolbar>;
+        <FormGroup controlId="formControlsSelect">
+          <ControlLabel>Select</ControlLabel>
+          <FormControl
+            componentClass="select"
+            value={this.state.do_type}
+            name="do_type"
+            onChange={this.handleChange}>
+              <option value="Todo">Todo</option>
+              <option value="Doing">Doing</option>
+              <option value="Done">Done</option>
+          </FormControl>
+        </FormGroup>
 
         <Button bsStyle="primary" type="submit" block>Save</Button>
         </form>
+
+        <ButtonToolbar>
+          <Button className="cusBtn" bsStyle="danger" onClick={this.DeleteNote} block>Delete</Button>
+        </ButtonToolbar>
+
       </div>
     );
   }
