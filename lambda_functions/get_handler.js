@@ -1,7 +1,8 @@
+
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient({region: "ap-northeast-2"});
 
-/* GET 메서드 처리 함수
+/* GET 메서드
   .../notes
   .../notes/{id}
 */
@@ -15,49 +16,82 @@ exports.handler = (event, context, callback) => {
 
     // notes 요청 시 event는 null이다.
     // notes/{id} 요청 시 event 는 not null이다.
-    console.log(event.pathParameters);
-    console.log(event.httpMethod);
-    console.log('event: ', JSON.stringify(event));
-    console.log('context: ', JSON.stringify(context));
+
+    console.log(event);
+    // Make a query params
     var table = "advanced_note_app";
 
-    var noteid = "12345";
+    try{
+      var query_type = event.queryStringParameters.type;
+    }catch(err){
+      query_type = null;
+    }
 
-    var params = {
-      TableName: table,
-      Key: {
-        noteid: noteid
-      }
-    };
-    var res;
-    const response = {
+
+    let response = {
       statusCode: 200,
       headers: {
-        "x-custom-header": "my custom header value"
+        "x-custom-header": "my custom header value",
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({
         message: 'Your function executed successfully!',
-        input: event,
       }),
     };
 
-    docClient.get(params, function(err, data) {
-      if (err) {
-        console.error(
-          "Unable to read item. Error JSON:",
-          JSON.stringify(err, null, 2)
-        );
+    // Handle GET all notes
+    if(query_type != null){
+
+      var params = {
+          TableName: table,
+          FilterExpression: '#do_type = :params',
+          ExpressionAttributeNames: {
+              '#do_type': 'do_type',
+          },
+          ExpressionAttributeValues: {
+              ':params': query_type,
+          },
+      };
+
+      docClient.scan(params, function(err, data){
+        if (err) {
+          console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+          response.body = JSON.stringify({result : "Failed"});
+
+          callback(null, response);
       } else {
-        console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
-        res = JSON.stringify(data, null, 2);
-        console.log("res : "+ res);
+          console.log("Succeed");
+          response.body = JSON.stringify({result : data});
 
-        // Response to Client when async get operation is done...
-        //context.succeed(res);
-        callback(null, response);
-      }
-    });
+          callback(null, response);
+        }
+      });
 
-    //context.succeed(res);
+    // Handle Get a single note
+    }else{
+      console.log("else called");
+      var noteid = (event.pathParameters.id).toString();
+      var params = {
+        TableName: table,
+        Key: {
+          noteid: noteid
+        }
+      };
+
+
+      docClient.get(params, function(err, data) {
+        if (err) {
+          response.statusCode = 500;
+          response.body = JSON.stringify({result : err});
+          callback(null, response);
+
+        } else {
+          response.body = JSON.stringify({result : data});
+          // Response to Client when async get operation is done...
+          callback(null, response);
+        }
+      });
+    }
 
 };

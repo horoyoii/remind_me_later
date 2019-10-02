@@ -11,13 +11,12 @@ exports.handler = (event, context, callback) => {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true,
         },
-        body: JSON.stringify('Hello from new Lambda!'),
+        body: JSON.stringify('Success'),
     };
 
 
     // pk of data is stored in URL path
     let noteid = event.pathParameters.id;
-    console.log(noteid);
 
 
     var params = {
@@ -34,14 +33,12 @@ exports.handler = (event, context, callback) => {
     console.log("Attempting a conditional delete...");
     docClient.delete(params, function(err, data) {
         if(err){
-            //callback(err, null);
+            callback(err, null);
             console.log(err);
         } else {
             console.log("succeed");
-            //callback(null, data);
-
+            callback(null, response);
         }
-        callback(null, response);
     })
 
 };

@@ -5,13 +5,17 @@ exports.handler = (event, context, callback) => {
     console.log("Processing...");
 
 
-    const response = {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify('Hello from new Lambda!'),
+
+    let response = {
+      statusCode: 200,
+      headers: {
+        "x-custom-header": "my custom header value",
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      body: JSON.stringify({
+        message: 'Your function executed successfully!',
+      }),
     };
 
     // data is stored in Body
@@ -30,7 +34,7 @@ exports.handler = (event, context, callback) => {
         ExpressionAttributeValues:{
             ":t": data.title,
             ":c": data.content,
-            ":dt":data.type
+            ":dt": data.type
         },
         ReturnValues:"UPDATED_NEW"
     };
@@ -39,12 +43,11 @@ exports.handler = (event, context, callback) => {
 
     docClient.update(params, function(err, data) {
         if(err){
-            //callback(err, null);
+            callback(err, null);
         } else {
             //callback(null, data);
-
+            callback(null, response);
         }
-        callback(null, response);
     })
 
 };
