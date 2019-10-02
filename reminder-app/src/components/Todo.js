@@ -6,7 +6,6 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Link } from 'react-router-dom';
 
 import ListItem from './ListItem'
-import Modal from './Modal'
 export default class Todo extends Component {
   constructor(props){
     super(props);

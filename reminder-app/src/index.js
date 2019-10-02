@@ -17,7 +17,7 @@ var BackgroundImage = React.Component({
     this.setState({x:x,y:y});
   },
   render:function(){
-    return (<div><img className='bg' src={'https://images.pexels.com/photos/373892/pexels-photo-373892.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb'} /></div>)
+    return (<div><img className='bg' src={'https://user-images.githubusercontent.com/34915108/66022628-83d98000-e529-11e9-86e6-e37b1e41cc45.jpg'} /></div>)
   }
 });
 

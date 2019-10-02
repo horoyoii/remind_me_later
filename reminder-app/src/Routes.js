@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch,AppliedRoute } from "react-router-dom";
-import Home from "./components/Home";
 import Doing from "./components/Doing"
 import Todo from "./components/Todo"
 import Done from "./components/Done"

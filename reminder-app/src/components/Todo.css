@@ -1,4 +1,7 @@
 
+h1{
+  color: white;
+}
 
 .Todo .notes h4 {
   font-family: "Open Sans", sans-serif;
@@ -11,4 +14,8 @@
 }
 .Todo .notes p {
   color: #666;
+}
+
+label{
+  color:white;
 }
